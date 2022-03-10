@@ -22,15 +22,17 @@ export default function FailSnackbars({ MessageToPass, open, setOpen }) {
   };
 
   return (
-    <Stack spacing={2} sx={{ width: "100%" }}>
-      {/* <Button variant="outlined" onClick={handleClick}>
+    <>
+      <Stack spacing={2} sx={{ width: "100%" }}>
+        {/* <Button variant="outlined" onClick={handleClick}>
         Open success snackbar
       </Button> */}
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
-          {MessageToPass ? MessageToPass : "error occured"}
-        </Alert>
-      </Snackbar>
-    </Stack>
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity="error" sx={{ width: "100%" }}>
+            {MessageToPass ? MessageToPass : "error occured"}
+          </Alert>
+        </Snackbar>
+      </Stack>
+    </>
   );
 }
