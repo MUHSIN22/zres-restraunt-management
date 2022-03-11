@@ -4,20 +4,10 @@ import "./journals.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
-import * as actions from "../../../../State Manager/Actions/Account/Transactions/journalAction";
-import { connect } from "react-redux";
 
 import FailSnackbars from "../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../basic components/sucessSidePopup";
-function Journals({
-  journalData,
-  CreateJournalEntry,
-  updateJournalEntry,
-  deleteJournalEntry,
-  fetchJournalEntry,
-  searchJournalEntry,
-  filterData,
-}) {
+function Journals() {
   const dataJournal = {
     JEntryDate: "",
     DebitAccountId: "",
@@ -38,33 +28,17 @@ function Journals({
   };
 
   const [newJournal, setNewJournal] = useState(false);
-  const [entryDate, setEntryDate] = useState(new Date());
   const [dataJournalToSend, setDataJournalToSend] = useState(dataJournal);
   const [startDate, setStartDate] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [edit, setEdit] = useState(false);
-  const [savedData, setSavedData] = useState([]);
-  const [loading, setloading] = useState(false);
   const [dataFromServer, setDataFromServer] = useState([]);
-  const [editData, setEditData] = useState({});
   const [debitCredit, setDebitCredit] = useState(0);
   const [dropdownList, setDropdownList] = useState([]);
-  const [editTableSelectedID, setEditTableSelctedID] = useState(0);
   const [messageToPass, setMessageToPass] = useState("");
   const [failSnackbar, setFailSnackBar] = useState(false);
   const [sucessSnackbar, setSucessSnackBar] = useState(false);
-  const [sucessAdded, setSucessAdded] = useState(true);
   const [snackBarOpen, setSnackbarOpen] = useState(true);
-
-  const handleFilterByData = () => {
-    const fromdate = moment(startDate).format("MM-DD-YYYY").toString();
-    const todate = moment(toDate).format("MM-DD-YYYY").toString();
-    console.log("fromdate:", fromdate, ",", "todate:", todate);
-    searchJournalEntry(fromdate, todate, () => {
-      window.alert("sucess filter");
-      filterData();
-    });
-  };
 
   const handleDataInput = (e) => {
     const value = e.target.value;
@@ -76,41 +50,6 @@ function Journals({
       JDebit: debitCredit,
     });
   };
-
-  const getAccountType = () => {
-    const url = "http://localhost:5000/api/v1/Journal/GetAccountHeadName";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setDropdownList(listsFromServer);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    getAccountType();
-  });
-
-  useEffect(() => {
-    fetchJournalEntry();
-  }, []);
-
-  useEffect(() => {
-    if (filterData?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (filterData?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(filterData);
-    } else {
-    }
-  }, [filterData]);
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -129,47 +68,11 @@ function Journals({
     setToDate(date);
   };
 
-  const handleJournalSubmit = (e) => {
-    e.preventDefault();
-    setFailSnackBar(false);
-    setSucessSnackBar(false);
-    console.log("THE DATA", dataJournalToSend);
-    if (editTableSelectedID <= 0) {
-      CreateJournalEntry(dataJournalToSend, () => {
-        window.alert("sucess");
-        setSucessSnackBar(true);
-        setMessageToPass("Sucessfully Added");
-        setSnackbarOpen(true);
+  const handleJournalSubmit = (e) => {};
 
-        filterData();
-      });
-      fetchJournalEntry();
-      setDataJournalToSend(dataJournal);
-    } else {
-      updateJournalEntry(editTableSelectedID, dataJournalToSend, () => {
-        setSucessSnackBar(true);
-        setMessageToPass("Sucessfully Updated");
-        setSnackbarOpen(true);
-        fetchJournalEntry();
-        filterData();
-        setDataJournalToSend(dataJournal);
-      });
-    }
-  };
+  const handleClearALL = () => {};
 
-  const handleClearALL = () => {
-    setDataJournalToSend(dataJournal);
-    setDebitCredit(0);
-  };
-
-  const handleEditOptions = (id) => {
-    setEditTableSelctedID(id);
-    const newdata = journalData.find((x) => x.EntryNo === id);
-    setDataJournalToSend(newdata);
-    setDebitCredit(newdata?.JCredit);
-    setNewJournal(true);
-    setEdit(true);
-  };
+  const handleEditOptions = (id) => {};
 
   const handleExitfun = () => {
     setEdit(false);
@@ -219,9 +122,7 @@ function Journals({
           </div>
 
           <div className="search__Section">
-            <button type="button" onClick={handleFilterByData}>
-              Search
-            </button>
+            <button type="button">Search</button>
           </div>
         </div>
         <div className="journal__container">
@@ -468,17 +369,4 @@ function Journals({
   );
 }
 
-const mapStateToProps = (state) => ({
-  journalData: state.journalReducer.journalList,
-  filterData: state.journalReducer.filteredList,
-});
-
-const mapDispatchToProps = {
-  searchJournalEntry: actions.searchByDate,
-  CreateJournalEntry: actions.create,
-  updateJournalEntry: actions.update,
-  deleteJournalEntry: actions.Delete,
-  fetchJournalEntry: actions.fetchAll,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Journals);
+export default Journals;

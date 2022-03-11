@@ -1,32 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./customerDetails.scss";
-import * as actions from "../../../State Manager/Actions/Basic Crud Action/CrudAction";
+
 import dummyUserData from "./dummyUserData";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import CircleIcon from "@mui/icons-material/Circle";
-import { connect } from "react-redux";
+
 import LoadingScreen from "../../loadingScreen/LoadingScreen";
 
 function CustomerDetails({ fetchALLDataList, dataList }) {
-  useEffect(() => {
-    fetchALLDataList();
-  }, []);
-
   const [dataFromServer, setDataFromServer] = useState([]);
 
   const [loading, setloading] = useState(false);
-  useEffect(() => {
-    if (dataList?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (dataList?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(dataList);
-    } else {
-    }
-  }, [dataList]);
 
   console.log("THE OTIGINAL DATA IS", dataFromServer);
 
@@ -35,9 +20,9 @@ function CustomerDetails({ fetchALLDataList, dataList }) {
   const [postPerPage, setPostPerPage] = useState(7);
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
-  const currentPost = dataFromServer.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPost = dummyUserData.slice(indexOfFirstPost, indexOfLastPost);
 
-  for (let i = 1; i <= Math.ceil(dataFromServer.length / postPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(dummyUserData.length / postPerPage); i++) {
     pageNumber.push(i);
   }
 
@@ -83,10 +68,10 @@ function CustomerDetails({ fetchALLDataList, dataList }) {
               {currentPost.map((data, index) => (
                 <tr key={index}>
                   <td data-label="Customer Id"></td>
-                  <td data-label="Customer Name">{data.name}</td>
+                  <td data-label="Customer Name">name</td>
                   <td data-label="Address">Kayattal house</td>
-                  <td data-label="Email Id">{data.email}</td>
-                  <td data-label="Phone">{data.phone}</td>
+                  <td data-label="Email Id">email</td>
+                  <td data-label="Phone">phone</td>
                   <td data-label="Loyality Customer">yes</td>
                   <td
                     data-label="Status"
@@ -117,12 +102,4 @@ function CustomerDetails({ fetchALLDataList, dataList }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  dataList: state.BasicCrudReducer.dataList,
-});
-
-const mapDispatchToProp = {
-  fetchALLDataList: actions.fetchAll,
-};
-
-export default connect(mapStateToProps, mapDispatchToProp)(CustomerDetails);
+export default CustomerDetails;

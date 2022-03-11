@@ -3,8 +3,7 @@ import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOu
 import "./categoryMaster.scss";
 import { useDropzone } from "react-dropzone";
 import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
-import * as actions from "../../../../State Manager/Actions/inventory/master/categoryMaterAction";
-import { connect } from "react-redux";
+
 import SucessSnackbars from "../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../basic components/failSnackBar";
 const thumbsContainer = {
@@ -44,7 +43,6 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
   const [PopUp, setPopUp] = useState(false);
   const [questionPopUp, setQuestionPopUp] = useState(false);
   const [sucessUpdatePopup, setSucessUpdatePopUp] = useState(false);
-  const [discountOrTax, setDiscountOrTas] = useState("");
   const [files, setFiles] = useState([]);
   const [selectedRadio, setSelectedRadio] = useState("Discount");
   const [dataFromServer, setDataFromServer] = useState([]);
@@ -55,25 +53,6 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
 
   const [catregoryDropdown, setCategoryDropdown] = useState([]);
 
-  const getCategoryList = () => {
-    const url =
-      " http://localhost:38719/api/v1/Category/GetTaxPercentage?CMPid=1";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setCategoryDropdown(listsFromServer);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getCategoryList();
-  }, []);
   const datas = {
     // categoryCode: "",
 
@@ -91,22 +70,6 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
   };
 
   const [dataToSend, setDataToSend] = useState(datas);
-
-  useEffect(() => {
-    fetchCategory();
-  }, []);
-
-  useEffect(() => {
-    if (categoryList?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (categoryList?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(categoryList);
-    } else {
-    }
-  }, [categoryList]);
 
   const handleAddCategoryToSend = (e) => {
     const value = e.target.value;
@@ -174,8 +137,6 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createCategory(dataToSend, () => window.alert("sucess"));
-    console.log("the datta to send", dataToSend);
   };
 
   console.log("the datta to send ", dataFromServer);
@@ -207,7 +168,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                       </g>
                     </svg>
 
-                    {dataToSend.discount > 0 && dataToSend.tax <= 0 && (
+                    {dataToSend.Discount > 0 && dataToSend.tax <= 0 && (
                       <h2>
                         {" "}
                         Are you sure you want to set discount for{" "}
@@ -215,7 +176,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                       </h2>
                     )}
 
-                    {dataToSend.discount <= 0 && dataToSend.tax > 0 && (
+                    {dataToSend.Discount <= 0 && dataToSend.tax > 0 && (
                       <h2>
                         {" "}
                         Are you sure you want to set Tax for{" "}
@@ -223,7 +184,7 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
                       </h2>
                     )}
 
-                    {dataToSend.discount > 0 && dataToSend.tax > 0 && (
+                    {dataToSend.Discount > 0 && dataToSend.tax > 0 && (
                       <h2>
                         {" "}
                         Are you sure you want to set tax and discount for{" "}
@@ -294,41 +255,39 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
 
             {categoryMoreClicked && (
               <>
-                {dataFromServer.map((cat) => (
-                  <div className="category__content">
-                    <div className="svg__cat__Section">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20.5"
-                        height="20.5"
-                        viewBox="0 0 14.5 13.5"
-                      >
-                        <line
-                          id="Line_157"
-                          data-name="Line 157"
-                          y2="13"
-                          transform="translate(0.5)"
-                          fill="none"
-                          stroke="#040153"
-                          stroke-width="1"
-                        />
-                        <line
-                          id="Line_158"
-                          data-name="Line 158"
-                          x1="14"
-                          transform="translate(0.5 13)"
-                          fill="none"
-                          stroke="#040153"
-                          stroke-width="1"
-                        />
-                      </svg>
-                    </div>
-
-                    <div className="category__name">
-                      <h5>{cat.Name.toLowerCase().replace(/['"]+/g, "")}</h5>
-                    </div>
+                <div className="category__content">
+                  <div className="svg__cat__Section">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="20.5"
+                      height="20.5"
+                      viewBox="0 0 14.5 13.5"
+                    >
+                      <line
+                        id="Line_157"
+                        data-name="Line 157"
+                        y2="13"
+                        transform="translate(0.5)"
+                        fill="none"
+                        stroke="#040153"
+                        stroke-width="1"
+                      />
+                      <line
+                        id="Line_158"
+                        data-name="Line 158"
+                        x1="14"
+                        transform="translate(0.5 13)"
+                        fill="none"
+                        stroke="#040153"
+                        stroke-width="1"
+                      />
+                    </svg>
                   </div>
-                ))}
+
+                  <div className="category__name">
+                    <h5>Fruits</h5>
+                  </div>
+                </div>
               </>
             )}
           </div>
@@ -500,13 +459,4 @@ function CategoryMaster({ fetchCategory, categoryList, createCategory }) {
   );
 }
 
-const mapStateToProp = (state) => ({
-  categoryList: state.CategoryMasterReducer.CategoryList,
-});
-
-const mapDispatchToProp = {
-  fetchCategory: actions.fetchAll,
-  createCategory: actions.create,
-};
-
-export default connect(mapStateToProp, mapDispatchToProp)(CategoryMaster);
+export default CategoryMaster;

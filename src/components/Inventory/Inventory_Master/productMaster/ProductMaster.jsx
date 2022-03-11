@@ -1,38 +1,12 @@
 import "./productMaster.scss";
 import React, { useEffect, useState } from "react";
 import AddNew from "./addNew/AddNew";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import * as actions from "../../../../State Manager/Actions/inventory/master/productMaster";
-import { connect } from "react-redux";
-import LoadingScreen from "../../../loadingScreen/LoadingScreen";
-function ProductMaster({ productLists, fetchALLProducts }) {
+
+function ProductMaster() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [selectedTr, setSelectedTr] = useState({});
   const [editOption, setEditOption] = useState(false);
-  const [loading, setloading] = useState(false);
-  const [dataFromServer, setDataFromServer] = useState([]);
-
-  const handleEditOption = () => {
-    setEditOption(true);
-    setMainTableView(false);
-  };
-
-  useEffect(() => {
-    fetchALLProducts();
-  }, []);
-
-  useEffect(() => {
-    if (productLists?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (productLists?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(productLists);
-    } else {
-    }
-  }, [productLists]);
 
   return (
     <div className="productMaster">
@@ -88,7 +62,7 @@ function ProductMaster({ productLists, fetchALLProducts }) {
             {/* edit btn */}
             {selectedTr.length !== 0 && (
               <>
-                <div className="different__option" onClick={handleEditOption}>
+                <div className="different__option">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="32.5"
@@ -151,28 +125,20 @@ function ProductMaster({ productLists, fetchALLProducts }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataFromServer.map((d) => (
-                    <tr
-                      style={{ cursor: "pointer" }}
-                      className={
-                        " " + (selectedTr === d.ProdctId && "tbodyareasss")
-                      }
-                      onClick={() => setSelectedTr(d.ProdctId)}
-                    >
-                      <td>{d.ProdctId}</td>
-                      <td>{d.ProductCode}</td>
-                      <td>{d.PName}</td>
-                      <td>{d.HSNCode}</td>
-                      <td>category</td>
-                      <td>{d.MeasureSymbol}</td>
-                      <td>{d.Taxid}</td>
-                      <td>{d.ReorderLevel}</td>
-                      <td>{d.MaxStockLevel}</td>
-                      <td>{d.Discount}</td>
-                      <td>{d.CreatedBy}</td>
-                      <td>{d.RackNo}</td>
-                    </tr>
-                  ))}
+                  <tr style={{ cursor: "pointer" }}>
+                    <td>12</td>
+                    <td>4</td>
+                    <td>PName</td>
+                    <td>HSNCode</td>
+                    <td>category</td>
+                    <td>kg</td>
+                    <td>1</td>
+                    <td>12</td>
+                    <td>MaxStockLevel</td>
+                    <td>Discount</td>
+                    <td>CreatedBy</td>
+                    <td>RackNo</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -183,12 +149,4 @@ function ProductMaster({ productLists, fetchALLProducts }) {
   );
 }
 
-const mapStateToProp = (state) => ({
-  productLists: state.productMasterReducer.productDetailsList,
-});
-
-const mapDispatchToProps = {
-  fetchALLProducts: actions.fetchAll,
-};
-
-export default connect(mapStateToProp, mapDispatchToProps)(ProductMaster);
+export default ProductMaster;

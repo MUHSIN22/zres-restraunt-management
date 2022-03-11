@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./trailBalance.scss";
 import Prints from "./Prints/Prints";
-import { connect } from "react-redux";
-import * as actions from "../../../../State Manager/Actions/Account/reports/TrialBalanceAction";
+
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
@@ -41,16 +40,7 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
     settoDate(date);
   };
 
-  const handleFilterByData = () => {
-    const fromdate = moment(fromDate).format("MM-DD-YYYY").toString();
-    const todate = moment(toDate).format("MM-DD-YYYY").toString();
-    console.log("fromdate:", fromdate, ",", "todate:", todate);
-    searchLedgerEntry(fromdate, todate, () => {
-      window.alert("sucess filter");
-      findGrandTotal();
-      console.log("the data inside ", dataFromServer);
-    });
-  };
+  const handleFilterByData = () => {};
 
   const [debitTotal, setDebitTotal] = useState(0);
   const [creditTotal, setCreditTotal] = useState(0);
@@ -293,23 +283,20 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     <td></td>
                     <td></td>
                   </tr>
-                  {dataFromServer
-                    ?.filter((data) => data.GroupAbbr === "LIABILITY")
-                    .map((item) => (
-                      <tr>
-                        <td
-                          style={{
-                            textAlign: "left",
 
-                            paddingLeft: "50px",
-                          }}
-                        >
-                          {item.AccountGroupName}
-                        </td>
-                        <td>{item.Debit}</td>
-                        <td>{item.Credit}</td>
-                      </tr>
-                    ))}
+                  <tr>
+                    <td
+                      style={{
+                        textAlign: "left",
+
+                        paddingLeft: "50px",
+                      }}
+                    >
+                      AccountGroupName
+                    </td>
+                    <td>Debit</td>
+                    <td>Credit</td>
+                  </tr>
 
                   <tr>
                     <td style={{ textAlign: "left", fontWeight: "bold" }}>
@@ -319,23 +306,19 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     <td></td>
                   </tr>
 
-                  {dataFromServer
-                    ?.filter((data) => data.GroupAbbr === "ASSET")
-                    .map((item) => (
-                      <tr>
-                        <td
-                          style={{
-                            textAlign: "left",
+                  <tr>
+                    <td
+                      style={{
+                        textAlign: "left",
 
-                            paddingLeft: "50px",
-                          }}
-                        >
-                          {item.AccountGroupName}
-                        </td>
-                        <td>{item.Debit}</td>
-                        <td>{item.Credit}</td>
-                      </tr>
-                    ))}
+                        paddingLeft: "50px",
+                      }}
+                    >
+                      AccountGroupName
+                    </td>
+                    <td>Debit</td>
+                    <td>Credit</td>
+                  </tr>
 
                   <tr>
                     <td style={{ textAlign: "left", fontWeight: "bold" }}>
@@ -344,23 +327,20 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     <td></td>
                     <td></td>
                   </tr>
-                  {dataFromServer
-                    ?.filter((data) => data.GroupAbbr === "INCOME")
-                    .map((item) => (
-                      <tr>
-                        <td
-                          style={{
-                            textAlign: "left",
 
-                            paddingLeft: "50px",
-                          }}
-                        >
-                          {item.AccountGroupName}
-                        </td>
-                        <td>{item.Debit}</td>
-                        <td>{item.Credit}</td>
-                      </tr>
-                    ))}
+                  <tr>
+                    <td
+                      style={{
+                        textAlign: "left",
+
+                        paddingLeft: "50px",
+                      }}
+                    >
+                      AccountGroupName
+                    </td>
+                    <td>Debit</td>
+                    <td>Credit</td>
+                  </tr>
 
                   <tr>
                     <td style={{ textAlign: "left", fontWeight: "bold" }}>
@@ -370,23 +350,19 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
                     <td></td>
                   </tr>
 
-                  {dataFromServer
-                    ?.filter((data) => data.GroupAbbr === "EXPENSE")
-                    .map((item) => (
-                      <tr>
-                        <td
-                          style={{
-                            textAlign: "left",
+                  <tr>
+                    <td
+                      style={{
+                        textAlign: "left",
 
-                            paddingLeft: "50px",
-                          }}
-                        >
-                          {item.AccountGroupName}
-                        </td>
-                        <td>{item.Debit}</td>
-                        <td>{item.Credit}</td>
-                      </tr>
-                    ))}
+                        paddingLeft: "50px",
+                      }}
+                    >
+                      AccountGroupName
+                    </td>
+                    <td>Debit</td>
+                    <td>Credit</td>
+                  </tr>
                 </tbody>
                 <tfoot>
                   <tr>
@@ -412,12 +388,4 @@ function TrialBalance({ filterData, searchLedgerEntry }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  filterData: state.trialBalanceReducer.filteredList,
-});
-
-const mapDispatchToProps = {
-  searchLedgerEntry: actions.searchByDate,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TrialBalance);
+export default TrialBalance;

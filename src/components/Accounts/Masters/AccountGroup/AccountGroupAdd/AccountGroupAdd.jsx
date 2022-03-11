@@ -1,21 +1,12 @@
 import React, { useEffect, useState } from "react";
-import * as actions from "../../../../../State Manager/Actions/Account/master/AccountGroupAction";
 import "./accountGroupAdd.scss";
-import { useDropzone } from "react-dropzone";
 import SucessfullMag from "../../../../Inventory/Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
-import { connect } from "react-redux";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 function AccountGroupAdd({
   setAddNewBtn,
   editTableSelectedID,
   setMainTableView,
-  setEditTableSelctedID,
-
-  accountGroupList,
-  CreateAccountGroupList,
-  UpdateAccountGroup,
-  deleteAccountGroup,
 }) {
   const data = {
     AccountGroupName: "",
@@ -35,17 +26,6 @@ function AccountGroupAdd({
   const [sucessAdded, setSucessAdded] = useState(true);
   const [snackBarOpen, setSnackbarOpen] = useState(true);
 
-  useEffect(() => {
-    if (editTableSelectedID != 0) {
-      setDataToSend({
-        ...accountGroupList.find(
-          (x) => x.AccountGroupID === editTableSelectedID
-        ),
-      });
-    }
-    console.log("THE DATA TO SEND IS", dataToSend);
-  }, [editTableSelectedID]);
-
   const handleAddCategoryToSend = (e) => {
     const value = e.target.value;
     setDataToSend({
@@ -56,42 +36,9 @@ function AccountGroupAdd({
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    setFailSnackBar(false);
-    setSucessSnackBar(false);
-    // setSucessfullmsg(true);
-    console.log(dataToSend);
-    if (editTableSelectedID === 0) {
-      CreateAccountGroupList(
-        dataToSend,
-        () => window.alert("sucess"),
-        setSucessSnackBar(true),
-        setMessageToPass("Sucessfully Added"),
-        setSnackbarOpen(true)
-      );
-      setDataToSend(data);
-    } else {
-      UpdateAccountGroup(
-        editTableSelectedID,
-        dataToSend,
-        () => setSucessSnackBar(true),
-        setMessageToPass("Sucessfully Updated"),
-        setSnackbarOpen(true)
-      );
-    }
   };
 
-  const handleDeletefunctionss = () => {
-    if (window.confirm("Are you sure you want to delete"))
-      deleteAccountGroup(
-        editTableSelectedID,
-        dataToSend.CMPid,
-        () => setSucessSnackBar(true),
-        setMessageToPass("Sucessfully Deleted"),
-        setSnackbarOpen(true),
-        setAddNewBtn(false),
-        setMainTableView(true)
-      );
-  };
+  const handleDeletefunctionss = () => {};
 
   return (
     <>
@@ -183,14 +130,4 @@ function AccountGroupAdd({
   );
 }
 
-const mapStateToProps = (state) => ({
-  accountGroupList: state.AccountGroupReducer.accountGroupList,
-});
-
-const mapDispatchToProp = {
-  CreateAccountGroupList: actions.create,
-  UpdateAccountGroup: actions.update,
-  deleteAccountGroup: actions.Delete,
-};
-
-export default connect(mapStateToProps, mapDispatchToProp)(AccountGroupAdd);
+export default AccountGroupAdd;

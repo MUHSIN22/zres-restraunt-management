@@ -3,19 +3,8 @@ import "./addNewTax.scss";
 import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
-import { connect } from "react-redux";
-import * as actions from "../../../../../State Manager/Actions/inventory/master/taxMasterAction";
 
-function AddNewTax({
-  setAddNewBtn,
-  setMainTableView,
-  editTax,
-  fetchTaxList,
-  createTaxList,
-  updateTax,
-  deleteTax,
-  TaxList,
-}) {
+function AddNewTax({ setAddNewBtn, setMainTableView, editTax }) {
   const data = {
     TaxCode: "",
     TaxPercentage: "",
@@ -33,39 +22,6 @@ function AddNewTax({
   const [addSucessfull, setAddSucessfull] = useState(false);
   const [snackbarSucess, setSnackbarSucess] = useState(false);
   const [snackbarFail, setSnackBarFail] = useState(false);
-  const [catregoryDropdown, setCategoryDropdown] = useState([]);
-
-  useEffect(() => {
-    fetchTaxList();
-  }, []);
-
-  useEffect(() => {
-    if (editTax != 0) {
-      setDataToSend({
-        ...TaxList.find((x) => x.Taxid === editTax),
-      });
-    }
-    console.log("THE DATA TO SEND IS", dataToSend);
-  }, [editTax]);
-
-  const getCategoryList = () => {
-    const url = " http://localhost:38719/api/v1/Tax/GetTaxName?CMPid=1";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setCategoryDropdown(listsFromServer);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getCategoryList();
-  }, []);
 
   const handleDatatoSend = (e) => {
     const value = e.target.value;
@@ -75,30 +31,12 @@ function AddNewTax({
       Taxable: e.target.checked,
     });
   };
-  console.log(dataToSend);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (editTax > 0) {
-      updateTax(editTax, dataToSend, () => window.alert("update sucessfull"));
-    } else {
-      createTaxList(dataToSend, () => {
-        window.alert("sucess");
-        setDataToSend(data);
-      });
-      console.log("THEDATA", dataToSend);
-    }
   };
 
-  const handleDeletefunctionss = () => {
-    if (window.confirm("Are you sure you want to delete"))
-      deleteTax(editTax, () => {
-        window.alert("delete sucessfull");
-        setAddNewBtn(false);
-        setMainTableView(true);
-      });
-  };
+  const handleDeletefunctionss = () => {};
 
   return (
     <>
@@ -185,9 +123,7 @@ function AddNewTax({
                   <option value="" disabled selected>
                     Choose Tax
                   </option>
-                  {catregoryDropdown.map((dtat) => (
-                    <option value={dtat.Value}>{dtat.Text}</option>
-                  ))}
+                  <option value="">Text</option>
                 </select>
               </div>
 
@@ -266,15 +202,5 @@ function AddNewTax({
     </>
   );
 }
-const mapStateToProps = (state) => ({
-  TaxList: state.TaxMasterReducer.TaxList,
-});
 
-const mapDispatchToProps = {
-  fetchTaxList: actions.fetchAll,
-  createTaxList: actions.create,
-  updateTax: actions.update,
-  deleteTax: actions.Delete,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewTax);
+export default AddNewTax;

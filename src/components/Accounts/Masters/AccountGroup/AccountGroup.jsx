@@ -1,36 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./accountGroup.scss";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+
 import AccountGroupAdd from "./AccountGroupAdd/AccountGroupAdd";
-import { connect } from "react-redux";
-import * as actions from "../../../../State Manager/Actions/Account/master/AccountGroupAction";
-import LoadingScreen from "../../../loadingScreen/LoadingScreen";
 
 function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [editTableSelectedID, setEditTableSelctedID] = useState(0);
 
-  const [dataFromServer, setDataFromServer] = useState([]);
-  const [loading, setloading] = useState(false);
-
-  useEffect(() => {
-    fetchALLAccountGroupList();
-  }, []);
-
-  useEffect(() => {
-    if (accoutGroupList?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (accoutGroupList?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(accoutGroupList);
-    } else {
-    }
-  }, [accoutGroupList]);
-
-  console.log("DATA FROM SERVER", dataFromServer);
   return (
     <>
       <div className="AccountGroup">
@@ -132,23 +109,30 @@ function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataFromServer.map((items, index) => (
-                      <tr
-                        key={index}
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          setEditTableSelctedID(items.AccountGroupID);
-
-                          setAddNewBtn(true);
-                          setMainTableView(false);
-                        }}
-                      >
-                        <td>{items.AccountGroupID}</td>
-                        <td>{items.AGCode}</td>
-                        <td>{items.GroupAbbr}</td>
-                        <td colspan="5">{items.AccountGroupName}</td>
-                      </tr>
-                    ))}
+                    <tr
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setAddNewBtn(true);
+                        setMainTableView(false);
+                      }}
+                    >
+                      <td>12</td>
+                      <td>154</td>
+                      <td>grpAbb</td>
+                      <td colspan="5">AccountGroupName</td>
+                    </tr>
+                    <tr
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setAddNewBtn(true);
+                        setMainTableView(false);
+                      }}
+                    >
+                      <td>12</td>
+                      <td>154</td>
+                      <td>grpAbb</td>
+                      <td colspan="5">AccountGroupName</td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -160,12 +144,4 @@ function AccountGroup({ fetchALLAccountGroupList, accoutGroupList }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  accoutGroupList: state.AccountGroupReducer.accountGroupList,
-});
-
-const mapDispatchToProp = {
-  fetchALLAccountGroupList: actions.fetchAll,
-};
-
-export default connect(mapStateToProps, mapDispatchToProp)(AccountGroup);
+export default AccountGroup;

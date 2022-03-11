@@ -1,38 +1,13 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import AddNewMeasurement from "./Addnew/AddNewMeasurement";
 import "./measurementDetails.scss";
-import * as actions from "../../../../State Manager/Actions/inventory/master/mesurementMasterActon";
-import { useEffect } from "react";
 
-function MesurementDetails({ mesurementList, fetchMesurementList }) {
+function MesurementDetails() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
   const [dataFromServer, setDataFromServer] = useState([]);
-  const [loading, setloading] = useState(false);
-
-  useEffect(() => {
-    fetchMesurementList();
-  }, []);
-
-  useEffect(() => {
-    if (mesurementList?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (mesurementList?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(mesurementList);
-    } else {
-    }
-  }, [mesurementList]);
 
   const [editMesure, setEditMeasure] = useState();
-  const handleEditMeasurement = (id) => {
-    setEditMeasure(id);
-    setAddNewBtn(true);
-    setMainTableView(false);
-  };
 
   console.log("mesurementUnits data ", dataFromServer);
   return (
@@ -129,14 +104,19 @@ function MesurementDetails({ mesurementList, fetchMesurementList }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataFromServer.map((data) => (
-                    <tr onClick={() => handleEditMeasurement(data.UOMid)}>
-                      <td>{data.UOMid}</td>
-                      <td>{data.Unit}</td>
-                      <td>{data.Symbol}</td>
-                      <td>{data.Discription}</td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <td>1</td>
+                    <td>100</td>
+                    <td>kg</td>
+                    <td>Discription</td>
+                  </tr>
+
+                  <tr>
+                    <td>1</td>
+                    <td>100</td>
+                    <td>kg</td>
+                    <td>Discription</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -146,12 +126,5 @@ function MesurementDetails({ mesurementList, fetchMesurementList }) {
     </div>
   );
 }
-const mapStateToProps = (state) => ({
-  mesurementList: state.MesurementMasterReducer.MesurementList,
-});
 
-const mapDispatchToProps = {
-  fetchMesurementList: actions.fetchAll,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MesurementDetails);
+export default MesurementDetails;

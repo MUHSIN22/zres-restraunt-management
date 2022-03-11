@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+
 import "./accountHeadAdd.scss";
-import { useDropzone } from "react-dropzone";
+
 import SucessfullMag from "../../../../Inventory/Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
-import * as actions from "../../../../../State Manager/Actions/Account/master/AccountHeadAction";
+
 import FailSnackbars from "../../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 function AccountHeadAdd({
   setAddNewBtn,
-  setEditTableSelctedID,
   setMainTableView,
   editTableSelectedID,
-  editTableData,
-  CreateAccountHeadList,
-  UpdateAccountHead,
-  deleteAccountHead,
-  accountHeadList,
 }) {
   const data = {
     AHCode: null,
@@ -30,20 +24,12 @@ function AccountHeadAdd({
   };
 
   const [dataToSend, setDataToSend] = useState(data);
-  const [files, setFiles] = useState([]);
   const [dropdownList, setDropdownList] = useState([]);
   const [sucessfullMsg, setSucessfullmsg] = useState(false);
   const [messageToPass, setMessageToPass] = useState("");
   const [failSnackbar, setFailSnackBar] = useState(false);
   const [sucessSnackbar, setSucessSnackBar] = useState(false);
   const [snackBarOpen, setSnackbarOpen] = useState(true);
-  useEffect(() => {
-    if (editTableSelectedID != 0) {
-      setDataToSend({
-        ...accountHeadList.find((x) => x.AccountHeadID === editTableSelectedID),
-      });
-    }
-  }, [editTableSelectedID]);
 
   const handleAddCategoryToSend = (e) => {
     const value = e.target.value;
@@ -51,68 +37,13 @@ function AccountHeadAdd({
       ...dataToSend,
       [e.target.name]: value,
     });
-    console.log("the data to send", dataToSend);
   };
-
-  // to get the category
-
-  const getAccountType = () => {
-    const url = "http://localhost:5000/api/v1/AccountHead/GetAccountGroupName";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setDropdownList(listsFromServer);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  useEffect(() => {
-    getAccountType();
-  });
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    setFailSnackBar(false);
-    setSucessSnackBar(false);
-    // setSucessfullmsg(true);
-    console.log(dataToSend);
-    if (editTableSelectedID === 0) {
-      CreateAccountHeadList(
-        dataToSend,
-        () => window.alert("sucess"),
-        setSucessSnackBar(true),
-        setMessageToPass("Sucessfully Added"),
-        setSnackbarOpen(true)
-      );
-      setDataToSend(data);
-    } else {
-      UpdateAccountHead(
-        editTableSelectedID,
-        dataToSend,
-        () => setSucessSnackBar(true),
-        setMessageToPass("Sucessfully Updated"),
-        setSnackbarOpen(true)
-      );
-    }
   };
 
-  const handleDeletefunctionss = () => {
-    if (window.confirm("Are you sure you want to delete"))
-      deleteAccountHead(
-        editTableSelectedID,
-        dataToSend.CMPid,
-        () => setSucessSnackBar(true),
-        setMessageToPass("Sucessfully Deleted"),
-        setSnackbarOpen(true),
-        setAddNewBtn(false),
-        setMainTableView(true)
-      );
-  };
+  const handleDeletefunctionss = () => {};
 
   return (
     <>
@@ -272,14 +203,4 @@ function AccountHeadAdd({
   );
 }
 
-const mapStateToProps = (state) => ({
-  accountHeadList: state.AccountHeadReducer.accountHeadList,
-});
-
-const mapDispatchToProp = {
-  CreateAccountHeadList: actions.create,
-  UpdateAccountHead: actions.update,
-  deleteAccountHead: actions.Delete,
-};
-
-export default connect(mapStateToProps, mapDispatchToProp)(AccountHeadAdd);
+export default AccountHeadAdd;

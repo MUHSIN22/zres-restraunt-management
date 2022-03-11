@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import * as actions from "../../../../../State Manager/Actions/inventory/master/productMaster";
+
 import "./addNew.scss";
 import { useDropzone } from "react-dropzone";
 import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
-import { connect } from "react-redux";
+
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 //  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -48,10 +48,8 @@ function AddNew({
   setAddNewBtn,
   setMainTableView,
   editOption,
-  dataToEdit,
   addNewBtn,
   setEditOption,
-  createNewProduct,
 }) {
   const datas = {
     InvtGid: 2,
@@ -84,65 +82,6 @@ function AddNew({
   const [catregoryDropdown, setCategoryDropdown] = useState([]);
   const [unitList, setUnitList] = useState([]);
   const [taxList, setTaxList] = useState([]);
-
-  useEffect(() => {
-    if (editOption) {
-      setDataToSend(dataToEdit);
-    }
-  }, [dataToEdit]);
-
-  useEffect(() => {
-    getCategoryList();
-    getUnitList();
-    getTaxList();
-  }, []);
-
-  const getCategoryList = () => {
-    const url =
-      "http://localhost:38719/api/v1/INVT_Product/GetCategory?CMPid=1";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setCategoryDropdown(listsFromServer);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getUnitList = () => {
-    const url = "http://localhost:38719/api/v1/INVT_Product/GetSymbol?CMPid=1";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setUnitList(listsFromServer);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const getTaxList = () => {
-    const url =
-      "http://localhost:38719/api/v1/INVT_Product/GetTaxPercentage?CMPid=1";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setTaxList(listsFromServer);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const ShowPreview = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -200,13 +139,6 @@ function AddNew({
 
   const submitFormHandler = (e) => {
     e.preventDefault();
-    setSnackbarSucess(true);
-    createNewProduct(DataToSend, () => {
-      window.alert("suxcess");
-      console.log("THER DATA IS sucess ", DataToSend);
-    });
-
-    console.log("THER DATA IS ", DataToSend);
   };
 
   const cancelBtn = (e) => {
@@ -242,7 +174,6 @@ function AddNew({
                     onChange={handleAddDataToSend}
                     required
                     value={DataToSend.ProductCode}
-                    required
                   />
                 </div>
                 <div className="input__Sections">
@@ -253,7 +184,6 @@ function AddNew({
                     name="HsnCode"
                     onChange={handleAddDataToSend}
                     value={DataToSend.HsnCode}
-                    required
                   />
                 </div>
                 <div className="input__Sections">
@@ -264,7 +194,6 @@ function AddNew({
                     name="PName"
                     onChange={handleAddDataToSend}
                     value={DataToSend.PName}
-                    required
                   />
                 </div>
                 <div className="input__Sections">
@@ -275,14 +204,11 @@ function AddNew({
                     required
                     onChange={handleAddDataToSend}
                     value={DataToSend.Cid}
-                    required
                   >
                     <option value="" disabled selected>
                       Choose Category
                     </option>
-                    {catregoryDropdown?.map((cate) => (
-                      <option value={cate.Value}>{cate.Text}</option>
-                    ))}
+                    <option value="">q</option>
                   </select>
                 </div>
                 <div className="input__Sections">
@@ -322,7 +248,6 @@ function AddNew({
                   <select
                     name=""
                     id=""
-                    name="UOMid"
                     onChange={handleAddDataToSend}
                     value={DataToSend.UOMid}
                   >
@@ -340,16 +265,13 @@ function AddNew({
                   <select
                     name=""
                     id=""
-                    name="Taxid"
                     onChange={handleAddDataToSend}
                     value={DataToSend.Taxid}
                   >
                     <option value="" disabled selected>
                       Choose Tax
                     </option>
-                    {taxList?.map((cate) => (
-                      <option value={cate.Value}>{cate.Text}</option>
-                    ))}
+                    <option value="">1</option>
                   </select>
                 </div>
 
@@ -438,12 +360,4 @@ function AddNew({
   );
 }
 
-const mapStateToProp = (state) => ({
-  productList: state.productMasterReducer.productDetailsList,
-});
-
-const mapDispatchToProp = {
-  createNewProduct: actions.create,
-};
-
-export default connect(mapStateToProp, mapDispatchToProp)(AddNew);
+export default AddNew;

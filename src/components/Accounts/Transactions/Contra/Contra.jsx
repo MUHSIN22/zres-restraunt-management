@@ -4,8 +4,6 @@ import "./contra.scss";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
-import * as actions from "../../../../State Manager/Actions/Account/Transactions/contraAction";
-import { connect } from "react-redux";
 
 import FailSnackbars from "../../../basic components/failSnackBar";
 import SucessSnackbars from "../../../basic components/sucessSidePopup";
@@ -56,15 +54,7 @@ function Contra({
   const [sucessAdded, setSucessAdded] = useState(true);
   const [snackBarOpen, setSnackbarOpen] = useState(true);
 
-  const handleFilterByData = () => {
-    const fromdate = moment(startDate).format("MM-DD-YYYY").toString();
-    const todate = moment(toDate).format("MM-DD-YYYY").toString();
-    console.log("fromdate:", fromdate, ",", "todate:", todate);
-    searchContraEntry(fromdate, todate, () => {
-      window.alert("sucess filter");
-      FilterData();
-    });
-  };
+  const handleFilterByData = () => {};
 
   const handleDataInput = (e) => {
     const value = e.target.value;
@@ -76,41 +66,6 @@ function Contra({
       JDebit: debitCredit,
     });
   };
-
-  const getAccountType = () => {
-    const url = "http://localhost:5000/api/v1/Contra/GetAccountHeadName";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setDropdownList(listsFromServer);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    getAccountType();
-  });
-
-  useEffect(() => {
-    fetchContraEntry();
-  }, []);
-
-  useEffect(() => {
-    if (FilterData?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (FilterData?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(FilterData);
-    } else {
-    }
-  }, [FilterData]);
 
   // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -131,45 +86,11 @@ function Contra({
 
   const handleJournalSubmit = (e) => {
     e.preventDefault();
-    setFailSnackBar(false);
-    setSucessSnackBar(false);
-    console.log("THE DATA", dataJournalToSend);
-    if (editTableSelectedID <= 0) {
-      CreateContraEntry(dataJournalToSend, () => {
-        window.alert("sucess");
-        setSucessSnackBar(true);
-        setMessageToPass("Sucessfully Added");
-        setSnackbarOpen(true);
-      });
-      fetchContraEntry();
-      setDataJournalToSend(dataJournal);
-    } else {
-      updateContraEntry(
-        editTableSelectedID,
-        dataJournalToSend,
-        () => setSucessSnackBar(true),
-        setMessageToPass("Sucessfully Updated"),
-        setSnackbarOpen(true),
-        fetchContraEntry(),
-
-        setDataJournalToSend(dataJournal)
-      );
-    }
   };
 
-  const handleClearALL = () => {
-    setDataJournalToSend(dataJournal);
-    setDebitCredit(0);
-  };
+  const handleClearALL = () => {};
 
-  const handleEditOptions = (id) => {
-    setEditTableSelctedID(id);
-    const newdata = ContraData.find((x) => x.EntryNo === id);
-    setDataJournalToSend(newdata);
-    setDebitCredit(newdata?.JCredit);
-    setNewJournal(true);
-    setEdit(true);
-  };
+  const handleEditOptions = (id) => {};
 
   const handleExitfun = () => {
     setEdit(false);
@@ -468,17 +389,4 @@ function Contra({
   );
 }
 
-const mapStateToProps = (state) => ({
-  ContraData: state.contraReducer.ContraList,
-  FilterData: state.contraReducer.filteredList,
-});
-
-const mapDispatchToProps = {
-  searchContraEntry: actions.searchByDate,
-  CreateContraEntry: actions.create,
-  updateContraEntry: actions.update,
-  deleteContraEntry: actions.Delete,
-  fetchContraEntry: actions.fetchAll,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Contra);
+export default Contra;

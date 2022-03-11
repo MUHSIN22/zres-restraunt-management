@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+
 import SucessfullMag from "../../../Transaction Manager/Reports/Stock Cost/clossing stock print/SucessfullMessage/SucessfullMag";
 import "./addnewMesurement.scss";
-import * as actions from "../../../../../State Manager/Actions/inventory/master/mesurementMasterActon";
+
 import SucessSnackbars from "../../../../basic components/sucessSidePopup";
 import FailSnackbars from "../../../../basic components/failSnackBar";
 function AddNewMeasurement({
   setAddNewBtn,
-  mesurementList,
+
   setMainTableView,
-  createMesurementList,
+
   editMesure,
-  updateMeasurement,
-  deleteMesurement,
-  fetchMesurementList,
 }) {
   const data = {
     Unit: "",
@@ -30,33 +27,8 @@ function AddNewMeasurement({
 
   const [addSucessfull, setAddSucessfull] = useState(false);
 
-  useEffect(() => {
-    fetchMesurementList();
-  }, []);
-
-  useEffect(() => {
-    if (editMesure != 0) {
-      setDataToSend({
-        ...mesurementList.find((x) => x.UOMid === editMesure),
-      });
-    }
-    console.log("THE DATA TO SEND IS", DataToSend);
-  }, [editMesure]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (editMesure > 0) {
-      updateMeasurement(editMesure, DataToSend, () =>
-        window.alert("update sucessfull")
-      );
-    } else {
-      createMesurementList(DataToSend, () => {
-        window.alert("sucess");
-        setDataToSend(data);
-      });
-      console.log("THEDATA", DataToSend);
-    }
   };
 
   const handleAddDataToSend = (evt) => {
@@ -67,10 +39,7 @@ function AddNewMeasurement({
     });
   };
 
-  const handleDeletefunctionss = () => {
-    if (window.confirm("Are you sure you want to delete"))
-      deleteMesurement(editMesure, () => window.alert("delete sucessfull"));
-  };
+  const handleDeletefunctionss = () => {};
 
   return (
     <>
@@ -172,15 +141,5 @@ function AddNewMeasurement({
     </>
   );
 }
-const mapStateToProps = (state) => ({
-  mesurementList: state.MesurementMasterReducer.MesurementList,
-});
 
-const mapDispatchToProps = {
-  fetchMesurementList: actions.fetchAll,
-  createMesurementList: actions.create,
-  updateMeasurement: actions.update,
-  deleteMesurement: actions.Delete,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewMeasurement);
+export default AddNewMeasurement;

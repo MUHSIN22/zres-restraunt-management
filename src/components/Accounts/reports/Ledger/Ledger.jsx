@@ -4,68 +4,18 @@ import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import AccountLedger from "./AccoutLedger/AccountLedger";
-import * as actions from "../../../../State Manager/Actions/Account/reports/LegerAction";
-import { connect } from "react-redux";
-
-const Date = [
-  {
-    SINO: "1",
-
-    productCode: 541,
-    Amound: 10000,
-
-    productName: "sugar",
-    stock: 50,
-  },
-
-  {
-    SINO: "2",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "oil",
-    stock: 10,
-  },
-
-  {
-    SINO: "3",
-
-    productCode: 241,
-    Amound: 100000,
-
-    productName: "Potato",
-    stock: 30,
-  },
-
-  {
-    SINO: "4",
-
-    productCode: 341,
-    Amound: 10000,
-
-    productName: "Onion",
-    stock: 10,
-  },
-];
 
 const valuesToSend = {
   fromDate: "",
   toDate: "",
 };
 
-function Ledger({
-  fetchLedgerEntry,
-  LedgerList,
-  filterData,
-  searchLedgerEntry,
-}) {
+function Ledger({ searchLedgerEntry }) {
   const [clickedTr, SetClickedTr] = useState("");
   const [filterValue, setFilterValue] = useState(valuesToSend);
   const [dataFromServer, setDataFromServer] = useState([]);
   const [fromDate, setFromDate] = useState(null);
   const [toDate, settoDate] = useState(null);
-  const [loading, setloading] = useState(false);
   const [dropdownList, setDropdownList] = useState([]);
   const [accountNameId, setAccountNameId] = useState();
   const handleFromDate = (date) => {
@@ -77,32 +27,11 @@ function Ledger({
     settoDate(date);
   };
 
-  const handleFilterByData = () => {
-    const fromdate = moment(fromDate).format("MM-DD-YYYY").toString();
-    const todate = moment(toDate).format("MM-DD-YYYY").toString();
-    console.log("fromdate:", fromdate, ",", "todate:", todate);
-    searchLedgerEntry(fromdate, todate, accountNameId, () => {
-      window.alert("sucess filter");
-
-      console.log("the data inside ", dataFromServer);
-    });
-  };
+  const handleFilterByData = () => {};
 
   // useEffect(() => {
   //   handleFilteration();
   // }, [convertedFromDate, convertedToDate]);
-
-  useEffect(() => {
-    if (filterData?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (filterData?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(filterData);
-    } else {
-    }
-  }, [filterData]);
 
   const handleCheckBoxFilter = (e) => {
     const checked = e.target.checked;
@@ -111,25 +40,6 @@ function Ledger({
       [e.target.name]: checked,
     });
   };
-
-  const getAccountType = () => {
-    const url = "http://localhost:5000/api/v1/Ledger/GetAccountGroupName";
-
-    fetch(url, {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((listsFromServer) => {
-        setDropdownList(listsFromServer);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    getAccountType();
-  });
 
   const handleAccountNameID = (e) => {
     const data = e.target.value;
@@ -431,16 +341,14 @@ function Ledger({
                   </tr>
                 </thead>
                 <tbody>
-                  {dataFromServer.map((data, index) => (
-                    <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>{data.EntryDate}</td>
-                      <td colspan={"2"}>{data.AccountName}</td>
+                  <tr>
+                    <td>1</td>
+                    <td>EntryDate</td>
+                    <td colspan={"2"}>AccountName</td>
 
-                      <td>{data.Debit}</td>
-                      <td>{data.Credit}</td>
-                    </tr>
-                  ))}
+                    <td>Debit</td>
+                    <td>Credit</td>
+                  </tr>
                 </tbody>
                 {/* <tfoot>
                   <tr>
@@ -461,12 +369,5 @@ function Ledger({
     </>
   );
 }
-const mapStateToProps = (state) => ({
-  filterData: state.ledgerReducer.filteredList,
-});
 
-const mapDispatchToProps = {
-  fetchLedgerEntry: actions.fetchAll,
-  searchLedgerEntry: actions.searchByDate,
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Ledger);
+export default Ledger;

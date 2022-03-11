@@ -1,60 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./accountHead.scss";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import { connect } from "react-redux";
 import AccountHeadAdd from "./AccountHeadAdd/AccountHeadAdd";
-import * as actions from "../../../../State Manager/Actions/Account/master/AccountHeadAction";
 
-const Data = [
-  {
-    sino: 1,
-    headNo: "521",
-    code: "120a",
-    name: "Metro super Market",
-    typegroup: "Sundry Creditors",
-  },
-  {
-    sino: 2,
-    headNo: "521",
-    code: "120a",
-    name: "Cash in Hand",
-    typegroup: "Cash Balance",
-  },
-  {
-    sino: 3,
-    headNo: "521",
-    code: "120a",
-    name: "Opening Stock",
-    typegroup: "Opening Stock",
-  },
-];
-
-function AccountHead({ accoutHeadList, fetchALLAccountGroupList }) {
+function AccountHead() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
-  const [editTableSelectedSnio, setEditTableSelctedSino] = useState();
   const [editTableData, setEditTableData] = useState([]);
-  const [dataFromServer, setDataFromServer] = useState([]);
-  const [loading, setloading] = useState(false);
   const [editTableSelectedID, setEditTableSelctedID] = useState(0);
 
-  useEffect(() => {
-    fetchALLAccountGroupList();
-  }, []);
-
-  useEffect(() => {
-    if (accoutHeadList?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (accoutHeadList?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(accoutHeadList);
-    } else {
-    }
-  }, [accoutHeadList]);
-
-  console.log("DATA FROM SERVER", dataFromServer);
   return (
     <div className="AccountHead">
       {/* sucess message for add btn */}
@@ -152,23 +105,32 @@ function AccountHead({ accoutHeadList, fetchALLAccountGroupList }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataFromServer.map((items, index) => (
-                    <tr
-                      key={index}
-                      style={{ cursor: "pointer" }}
-                      onClick={() => {
-                        setEditTableSelctedID(items.AccountHeadID);
-                        setAddNewBtn(true);
-                        setMainTableView(false);
-                      }}
-                    >
-                      <td>{items.AccountHeadID}</td>
-                      <td>{items.AccountHeadID}</td>
-                      <td>{items.AHCode}</td>
-                      <td colspan="4">{items.AccountHeadName}</td>
-                      <td>{items.AccountGroupID}</td>
-                    </tr>
-                  ))}
+                  <tr
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setAddNewBtn(true);
+                      setMainTableView(false);
+                    }}
+                  >
+                    <td>125</td>
+                    <td>152</td>
+                    <td>45</td>
+                    <td colspan="4">AccountHeadName</td>
+                    <td>12</td>
+                  </tr>
+                  <tr
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      setAddNewBtn(true);
+                      setMainTableView(false);
+                    }}
+                  >
+                    <td>125</td>
+                    <td>152</td>
+                    <td>45</td>
+                    <td colspan="4">AccountHeadName</td>
+                    <td>12</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -179,12 +141,4 @@ function AccountHead({ accoutHeadList, fetchALLAccountGroupList }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  accoutHeadList: state.AccountHeadReducer.accountHeadList,
-});
-
-const mapDispatchToProp = {
-  fetchALLAccountGroupList: actions.fetchAll,
-};
-
-export default connect(mapStateToProps, mapDispatchToProp)(AccountHead);
+export default AccountHead;

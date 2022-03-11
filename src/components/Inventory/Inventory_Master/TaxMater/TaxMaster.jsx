@@ -1,39 +1,12 @@
 import React, { useEffect, useState } from "react";
 import AddNewTax from "./AddnewTax/AddNewTax";
 import "./taxMaster.scss";
-import * as actions from "../../../../State Manager/Actions/inventory/master/taxMasterAction";
-import { connect } from "react-redux";
-function TaxMaster({ taxList, fetchTaxList }) {
+
+function TaxMaster() {
   const [addNewBtn, setAddNewBtn] = useState(false);
   const [mainTableView, setMainTableView] = useState(true);
 
-  const [dataFromServer, setDataFromServer] = useState([]);
-  const [loading, setloading] = useState(false);
-
-  useEffect(() => {
-    fetchTaxList();
-  }, []);
-
-  useEffect(() => {
-    if (taxList?.length === 0) {
-      setloading(true);
-      console.log("loadingg.........................");
-    } else if (taxList?.length > 0) {
-      setloading(false);
-      console.log("loading compleated");
-      setDataFromServer(taxList);
-    } else {
-    }
-  }, [taxList]);
-
-  console.log(taxList, "TaxList");
-
   const [editTax, setEditTax] = useState();
-  const handleEditTax = (id) => {
-    setEditTax(id);
-    setAddNewBtn(true);
-    setMainTableView(false);
-  };
 
   return (
     <div className="TaxMater">
@@ -130,15 +103,13 @@ function TaxMaster({ taxList, fetchTaxList }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {dataFromServer.map((data, index) => (
-                    <tr onClick={() => handleEditTax(data.Taxid)}>
-                      <td>{index + 1}</td>
-                      <td>{data.TaxCode}</td>
-                      <td>{data.TypeName}</td>
-                      <td>{data.TaxPercentage}</td>
-                      <td>{data.Taxable === true ? "True" : "False"}</td>
-                    </tr>
-                  ))}
+                  <tr>
+                    <td>index</td>
+                    <td>TaxCode</td>
+                    <td>TypeName</td>
+                    <td>TaxPercentage</td>
+                    <td>true</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -149,12 +120,4 @@ function TaxMaster({ taxList, fetchTaxList }) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  taxList: state.TaxMasterReducer.TaxList,
-});
-
-const mapDispatchToProps = {
-  fetchTaxList: actions.fetchAll,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TaxMaster);
+export default TaxMaster;
